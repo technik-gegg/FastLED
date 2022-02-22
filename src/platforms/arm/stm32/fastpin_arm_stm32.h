@@ -35,7 +35,7 @@ public:
     inline static void setOutput() { pinMode(PIN, OUTPUT); } // TODO: perform MUX config { _PDDR::r() |= _MASK; }
     inline static void setInput() { pinMode(PIN, INPUT); } // TODO: preform MUX config { _PDDR::r() &= ~_MASK; }
 
-#if defined(STM32F2XX)
+#if defined(STM32F2XX) || defined(STM32CORE)
     inline static void hi() __attribute__ ((always_inline)) { _GPIO::r()->BSRRL = _MASK; }
     inline static void lo() __attribute__ ((always_inline)) { _GPIO::r()->BSRRH = _MASK; }
 #else
@@ -57,7 +57,7 @@ public:
     inline static port_t loval() __attribute__ ((always_inline)) { return _GPIO::r()->ODR & ~_MASK; }
     inline static port_ptr_t port() __attribute__ ((always_inline)) { return &_GPIO::r()->ODR; }
 
-#if defined(STM32F2XX)
+#if defined(STM32F2XX) || defined(STM32CORE)
     inline static port_ptr_t sport() __attribute__ ((always_inline)) { return &_GPIO::r()->BSRRL; }
     inline static port_ptr_t cport() __attribute__ ((always_inline)) { return &_GPIO::r()->BSRRH; }
 #else
@@ -83,6 +83,11 @@ public:
 #elif defined(STM32F2XX)
 #define _RD32(T) struct __gen_struct_ ## T { static __attribute__((always_inline)) inline volatile GPIO_TypeDef * r() { return T; } };
 #define _FL_IO(L,C) _RD32(GPIO ## L);
+
+#elif defined(STM32CORE)
+#define _RD32(T) struct __gen_struct_ ## T { static __attribute__((always_inline)) inline volatile GPIO_TypeDef * r() { return T; } };
+#define _FL_IO(L,C) _RD32(GPIO ## L);
+
 #else
 #error "Platform not supported"
 #endif
@@ -211,7 +216,50 @@ _FL_DEFPIN(4, 15, C);
 
 #define HAS_HARDWARE_PIN_SUPPORT
 
-#endif // __STM32F1__
+#elif defined(STM32CORE) // ArduinoCoreSTM32 generic
+
+#define MAX_PIN 46
+
+_FL_DEFPIN(PA0, 0, A);	// PA0 - PA7
+_FL_DEFPIN(PA1, 1, A);
+_FL_DEFPIN(PA2, 2, A);
+_FL_DEFPIN(PA3, 3, A);
+_FL_DEFPIN(PA4, 4, A);
+_FL_DEFPIN(PA5, 5, A);
+_FL_DEFPIN(PA6, 6, A);
+_FL_DEFPIN(PA7, 7, A);
+_FL_DEFPIN(PA8, 8, A);	// PA8 - PA15
+_FL_DEFPIN(PA9, 9, A);
+_FL_DEFPIN(PA10, 10, A);
+_FL_DEFPIN(PA11, 11, A);
+_FL_DEFPIN(PA12, 12, A);
+_FL_DEFPIN(PA13, 13, A);
+_FL_DEFPIN(PA14, 14, A);
+_FL_DEFPIN(PA15, 15, A);
+
+_FL_DEFPIN(PB0, 0, B);	// PB0 - PB11
+_FL_DEFPIN(PB1, 1, B);
+_FL_DEFPIN(PB2, 2, B);
+_FL_DEFPIN(PB3, 3, B);
+_FL_DEFPIN(PB4, 4, B);
+_FL_DEFPIN(PB5, 5, B);
+_FL_DEFPIN(PB6, 6, B);
+_FL_DEFPIN(PB7, 7, B);
+_FL_DEFPIN(PB8, 8, B);
+_FL_DEFPIN(PB9, 9, B);
+_FL_DEFPIN(PB10, 10, B);
+_FL_DEFPIN(PB11, 11, B);
+
+_FL_DEFPIN(PC13, 13, C);	// PC13 - PC15
+_FL_DEFPIN(PC14, 14, C);
+_FL_DEFPIN(PC15, 15, C);
+
+#define SPI_DATA    PIN_SPI_MOSI
+#define SPI_CLOCK   PIN_SPI_SCK
+
+#define HAS_HARDWARE_PIN_SUPPORT
+
+#endif
 
 #endif // FASTLED_FORCE_SOFTWARE_PINS
 

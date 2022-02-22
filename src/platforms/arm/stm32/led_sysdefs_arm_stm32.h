@@ -20,6 +20,11 @@
 #define cli() nvic_globalirq_disable()
 #define sei() nvic_globalirq_enable()
 
+#elif defined(STM32CORE)
+
+#define cli()  __disable_irq(); __disable_fault_irq();
+#define sei() __enable_irq(); __enable_fault_irq();
+
 #else
 #error "Platform not supported"
 #endif
@@ -41,8 +46,10 @@
 
 // pgmspace definitions
 #define PROGMEM
+#if !defined(STM32CORE)
 #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
 #define pgm_read_dword_near(addr) pgm_read_dword(addr)
+#endif
 
 // Default to NOT using PROGMEM here
 #ifndef FASTLED_USE_PROGMEM
@@ -57,6 +64,17 @@ typedef volatile       uint8_t RwReg; /**< Read-Write 8-bit register (volatile u
 
 #if defined(STM32F2XX)
 #define F_CPU 120000000
+#elif defined(STM32CORE)
+    #undef F_CPU
+    #if defined(STM32F1xx)
+        #define F_CPU 72000000
+    #elif defined(STM32F2xx)
+        #define F_CPU 120000000
+    #elif defined(STM32F4xx)
+        #define F_CPU 168000000
+    #elif defined(STM32G0xx)
+        #define F_CPU 64000000
+    #endif
 #else
 #define F_CPU 72000000
 #endif
