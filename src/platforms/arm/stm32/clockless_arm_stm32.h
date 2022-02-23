@@ -75,10 +75,12 @@ protected:
     // This method is made static to force making register Y available to use for data on AVR - if the method is non-static, then
     // gcc will use register Y for the this pointer.
     static uint32_t showRGBInternal(PixelController<RGB_ORDER> pixels) {
+        #if (FASTLED_ALLOW_INTERRUPTS == 1)
         // Get access to the clock
         CoreDebug->DEMCR  |= CoreDebug_DEMCR_TRCENA_Msk;
         DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
         DWT->CYCCNT = 0;
+        #endif
 
         register data_ptr_t port = FastPin<DATA_PIN>::port();
         register data_t hi = *port | FastPin<DATA_PIN>::mask();;
@@ -93,7 +95,9 @@ protected:
 
         uint32_t next_mark = (T1+T2+T3);
 
+        #if (FASTLED_ALLOW_INTERRUPTS == 1)
         DWT->CYCCNT = 0;
+        #endif
         while(pixels.has(1)) {
             pixels.stepDithering();
             #if (FASTLED_ALLOW_INTERRUPTS == 1)
@@ -124,7 +128,11 @@ protected:
         };
 
         sei();
+        #if (FASTLED_ALLOW_INTERRUPTS == 1)
         return DWT->CYCCNT;
+        #else
+        return 0;
+        #endif
     }
 };
 

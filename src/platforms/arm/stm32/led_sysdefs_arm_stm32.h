@@ -21,9 +21,13 @@
 #define sei() nvic_globalirq_enable()
 
 #elif defined(STM32CORE)
-
+#if defined(STM32G0xx)
+#define cli()  __disable_irq();
+#define sei() __enable_irq();
+#else
 #define cli()  __disable_irq(); __disable_fault_irq();
 #define sei() __enable_irq(); __enable_fault_irq();
+#endif
 
 #else
 #error "Platform not supported"
