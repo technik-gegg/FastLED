@@ -218,7 +218,12 @@ _FL_DEFPIN(4, 15, C);
 
 #elif defined(STM32CORE) // ArduinoCoreSTM32 generic
 
+
+#if !defined(STM32G0xx)
 #define MAX_PIN 46
+#else
+#define MAX_PIN 54
+#endif
 
 _FL_DEFPIN(PA0, 0, A);	// PA0 - PA7
 _FL_DEFPIN(PA1, 1, A);
@@ -253,6 +258,17 @@ _FL_DEFPIN(PB11, 11, B);
 _FL_DEFPIN(PC13, 13, C);	// PC13 - PC15
 _FL_DEFPIN(PC14, 14, C);
 _FL_DEFPIN(PC15, 15, C);
+
+#if defined(STM32G0xx)
+_FL_DEFPIN(PD0, 0, D);	// PD0 - PD7
+_FL_DEFPIN(PD1, 1, D);
+_FL_DEFPIN(PD2, 2, D);
+_FL_DEFPIN(PD3, 3, D);
+_FL_DEFPIN(PD4, 4, D);
+_FL_DEFPIN(PD5, 5, D);
+_FL_DEFPIN(PD6, 6, D);
+_FL_DEFPIN(PD7, 7, D);
+#endif
 
 #define SPI_DATA    PIN_SPI_MOSI
 #define SPI_CLOCK   PIN_SPI_SCK
