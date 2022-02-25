@@ -222,7 +222,7 @@ _FL_DEFPIN(4, 15, C);
 #if !defined(STM32G0xx)
 #define MAX_PIN 46
 #else
-#define MAX_PIN 54
+#define MAX_PIN 53
 #endif
 
 _FL_DEFPIN(PA0, 0, A);	// PA0 - PA7
@@ -260,14 +260,13 @@ _FL_DEFPIN(PC14, 14, C);
 _FL_DEFPIN(PC15, 15, C);
 
 #if defined(STM32G0xx)
-_FL_DEFPIN(PD0, 0, D);	// PD0 - PD7
+_FL_DEFPIN(PD0, 0, D);	// PD0 - PD6
 _FL_DEFPIN(PD1, 1, D);
 _FL_DEFPIN(PD2, 2, D);
 _FL_DEFPIN(PD3, 3, D);
 _FL_DEFPIN(PD4, 4, D);
 _FL_DEFPIN(PD5, 5, D);
 _FL_DEFPIN(PD6, 6, D);
-_FL_DEFPIN(PD7, 7, D);
 #endif
 
 #define SPI_DATA    PIN_SPI_MOSI
